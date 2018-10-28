@@ -34,7 +34,7 @@ namespace junayed_naushad
     values = new vector<Entry>[tableSize];
   }
 
-  bool Table::found(string word)
+  bool Table::found(string word) const
   {
     int index = getHash(word, tableSize);
     for(int i = 0; i < values[index].size(); i++)
@@ -62,7 +62,34 @@ namespace junayed_naushad
       }
     }
   }
-  void Table::printTable()
+
+  string Table::getWord(int heapIndex) const
+  {
+    string word = "";
+    for(int i = 0; i < tableSize; i++)
+    {
+      for(int j = 0; j < values[i].size(); j++)
+      {
+        if(values[i].at(j).getHeapIndex() == heapIndex)
+          word += values[i].at(j).getWord();
+      }
+    }
+    return word;
+  }
+
+  int Table::getHeapIndex(string word) const
+  {
+    int heapIndex = 0;
+    int index = getHash(word, tableSize);
+    for(int i = 0; i < values[index].size(); i++)
+    {
+      if(word.compare(values[index].at(i).getWord()) == 0)
+        heapIndex += values[index].at(i).getHeapIndex();
+    }
+    return heapIndex;
+  }
+
+  void Table::printTable() const
   {
     cout << "Printing the hash table\n";
     for(int i = 0; i < tableSize; i++)
@@ -74,4 +101,9 @@ namespace junayed_naushad
     }
   }
 
+  MinHeap::MinHeap(int heapSize)
+  {
+    frequencies = new int[heapSize];
+    this->heapSize = heapSize;
+  }
 }

@@ -34,10 +34,12 @@ namespace junayed_naushad
     Table(int tableSize);
 
     int getTableSize() const {return tableSize;}
-    bool found(std::string word); // returns true if word is in table
+    bool found(std::string word) const; // returns true if word is in table
     void add(Entry e); // adds new entry to the table
     void remove(int heapIndex); // removes word associated with given heapIndex
-    void printTable();
+    std::string getWord(int heapIndex) const; // returns word associated with given heapIndex
+    int getHeapIndex(std::string word) const; // returns min heap index of given word
+    void printTable() const;
 
   private:
     std::vector<Entry> *values;
@@ -48,15 +50,20 @@ namespace junayed_naushad
   class MinHeap
   {
   public:
-
+    MinHeap(int heapSize);
+    void printHeap(); // print most frequent 15 words with corresponding frequencies
+    int insert(std::string word); // inserts new word into min heap and returns min heap index
+    void increment();
   private:
-
+    int *frequencies;
+    int heapSize;
+    int numElements;
   };
 
   class HeavyHitter
   {
   public:
-
+    void replaceMin(std::string word);
   private:
   };
 }
