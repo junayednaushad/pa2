@@ -16,8 +16,10 @@ int main()
   t1.add(e1);
   t1.add(e2);
   t1.add(e3);
-  string word = "anon";
-  int heapIndex = t1.getHeapIndex(word);
-  cout << heapIndex << endl;
+  t1.printTable();
+  int index = t1.getHeapIndex("anon");
+  cout << "index: " << index << endl;
+  t1.remove("hello");
+  t1.printTable();
   return 0;
 }
