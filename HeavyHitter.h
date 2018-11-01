@@ -39,11 +39,8 @@ namespace junayed_naushad
     void add(Entry e); // adds new entry to the table
     void remove(std::string word); // removes word from hashtable
     int getHeapIndex(std::string word) const; // returns min heap index of given word
+    void setHeapIndex(std::string word, int index);
     void printTable() const;
-    /*
-    void remove(int heapIndex); // removes word associated with given heapIndex
-    std::string getWord(int heapIndex) const; // returns word associated with given heapIndex
-    */
   private:
     std::vector<Entry> *values;
     int tableSize;
@@ -76,6 +73,7 @@ namespace junayed_naushad
     HeavyHitter(int heapSize, int tableSize) : minHeap(heapSize), hashTable(tableSize) {}
     void insert(std::string word);
     void replaceMin(std::string word);
+    void updateTable();
     void printHeap() const;
     void printTable() const;
 

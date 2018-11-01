@@ -84,44 +84,29 @@ namespace junayed_naushad
     return heapIndex;
   }
 
+  void Table::setHeapIndex(string word, int index)
+  {
+    int table_index = getHash(word, tableSize);
+    for(int i = 0; i < values[table_index].size(); i++)
+    {
+      if(word.compare(values[table_index].at(i).getWord()) == 0)
+      {
+        values[table_index].at(i).setValue(index);
+        i = values[table_index].size();
+      }
+    }
+  }
+
   void Table::printTable() const
   {
     for(int i = 0; i < tableSize; i++)
     {
       for(int j = 0; j < values[i].size(); j++)
       {
-        cout << values[i].at(j).getWord() << "\t\t\t" << values[i].at(j).getValue() << endl;
+        cout << "Word: " << values[i].at(j).getWord() << "\t\t\t\tHeap Index: " << values[i].at(j).getValue() << endl;
       }
     }
   }
-
-  /*
-  void Table::remove(int heapIndex)
-  {
-    for(int i = 0; i < tableSize; i++)
-    {
-      for(int j = 0; j < values[i].size(); j++)
-      {
-        if(values[i].at(j).getHeapIndex() == heapIndex)
-          values[i].erase(values[i].begin() + j);
-      }
-    }
-  }
-
-  string Table::getWord(int heapIndex) const
-  {
-    string word = "";
-    for(int i = 0; i < tableSize; i++)
-    {
-      for(int j = 0; j < values[i].size(); j++)
-      {
-        if(values[i].at(j).getHeapIndex() == heapIndex)
-          word += values[i].at(j).getWord();
-      }
-    }
-    return word;
-  }
-  */
 
   MinHeap::MinHeap(int heapSize)
   {
@@ -163,7 +148,7 @@ namespace junayed_naushad
   void MinHeap::printHeap() const
   {
     for(int i = 1; i <= numElements; i++)
-      cout << frequencies[i].getWord() << "\t\t\t" << frequencies[i].getValue() << endl;
+      cout << "Word: " << frequencies[i].getWord() << "\t\t\t\tFrequency: " << frequencies[i].getValue() << endl;
   }
 
   int MinHeap::insert(string word)
@@ -172,11 +157,6 @@ namespace junayed_naushad
     int index = numElements;
     frequencies[index].setWord(word);
     frequencies[index].setValue(1);
-
-    string childWord;
-    int childFrequency;
-    string parentWord;
-    int parentFrequency;
 
     while(index > 1 && frequencies[index].getValue() < frequencies[index/2].getValue())
     {
@@ -191,21 +171,41 @@ namespace junayed_naushad
     int frequency = frequencies[index].getValue() + 1;
     frequencies[index].setValue(frequency);
     //check invariant
-    
-    if(2*index > numElements) //leaf node
-      return;
-    else if(2*index+1 > numElements) //node only has one child
+    int left;
+    int right;
+    while(2*index <= numElements)
     {
-      if(frequencies[index].getValue() > frequencies[2*index].getValue())
+      if(2*index + 1 > numElements) //has only one child
       {
-        swap(index, (2*index));
+        if(frequencies[index].getValue() > frequencies[2*index].getValue())
+        {
+          swap(index, (2*index));
+          return;
+        }
+        else
+          return;
+      }
+      else //has two children
+      {
+        left = frequencies[2*index].getValue();
+        right = frequencies[2*index+1].getValue();
+        if(frequencies[index].getValue() > left || frequencies[index].getValue() > right)
+        {
+          if(left <= right)
+          {
+            swap(index, (2*index));
+            index = 2*index;
+          }
+          else
+          {
+            swap(index, (2*index+1));
+            index = 2*index+1;
+          }
+        }
+        else
+          return;
       }
     }
-    else //node has both children
-    {
-      
-    }
-    while(2*index+1 <= numElements && (frequencies[index].getValue() > frequencies[2*index].getValue() || frequencies[index].getValue() > frequencies[2*index+1].getValue()) )
   }
 
   void HeavyHitter::insert(string word)
@@ -238,6 +238,19 @@ namespace junayed_naushad
     Entry e1 = Entry(word, 1);
     hashTable.add(e1);
     minHeap.setEntry(1, word, min_frequency);
+  }
+
+  void HeavyHitter::updateTable()
+  {
+    string word;
+    for(int i = 1; i <= minHeap.getNumElements(); i++)
+    {
+      word = minHeap.getWordAtIndex(i);
+      if(hashTable.getHeapIndex(word) != i)
+      {
+        hashTable.setHeapIndex(word,i);
+      }
+    }
   }
 
   void HeavyHitter::printHeap() const
