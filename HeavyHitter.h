@@ -54,6 +54,10 @@ namespace junayed_naushad
   {
   public:
     MinHeap(int heapSize);
+    std::string getWordAtIndex(int index) const;
+    int getFrequencyAtIndex(int index) const;
+    void setEntry(int index, std::string word, int frequency);
+    void swap(int index1, int index2);
     void printHeap() const; // print 15 most frequent words with corresponding frequencies
     int insert(std::string word); // inserts new word into min heap and returns index
     void increment(int index); // increments frequency at given index and adjusts heap

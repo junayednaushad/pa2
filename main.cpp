@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <string>
 #include <vector>
+#include <fstream>
 using namespace std;
 using namespace junayed_naushad;
 
@@ -10,7 +11,7 @@ int main()
 {
   HeavyHitter h1 = HeavyHitter(16,17);
   int operation = 0;
-
+  string fileName;
   cout << "\nWelcome to the heavy hitter application\n";
   while(operation != 5)
   {
@@ -25,6 +26,20 @@ int main()
     if(operation == 1)
     {
       cout << "Please enter the name of the text file\n";
+      cin >> fileName;
+      ifstream myfile(fileName);
+      string word;
+      if (myfile.is_open())
+      {
+        while (getline(myfile, word, ' '))
+        {
+          transform(word.begin(), word.end(), word.begin(), ::tolower);
+          cout << word << '\n';
+        }
+      myfile.close();
+      }
+      else 
+        cout << "Unable to open file"; 
     }
     else if(operation == 2)
     {
@@ -44,4 +59,5 @@ int main()
     }
   }
   return 0;
+  
 }

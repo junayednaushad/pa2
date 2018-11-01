@@ -130,9 +130,39 @@ namespace junayed_naushad
     numElements = 0;
   }
 
+  string MinHeap::getWordAtIndex(int index) const
+  {
+    string word = frequencies[index].getWord();
+    return word;
+  }
+
+  int MinHeap::getFrequencyAtIndex(int index) const
+  {
+    int frequency = frequencies[index].getValue();
+    return frequency;
+  }
+
+  void MinHeap::setEntry(int index, string word, int frequency)
+  {
+    frequencies[index].setWord(word);
+    frequencies[index].setValue(frequency);
+  }
+
+  void MinHeap::swap(int index1, int index2)
+  {
+    string word1 = frequencies[index1].getWord();
+    int freq1 = frequencies[index1].getValue();
+    string word2 = frequencies[index2].getWord();
+    int freq2 = frequencies[index2].getValue();
+    frequencies[index2].setWord(word1);
+    frequencies[index2].setValue(freq1);
+    frequencies[index1].setWord(word2);
+    frequencies[index1].setValue(freq2);
+  }
+
   void MinHeap::printHeap() const
   {
-    for(int i = 1; i < heapSize; i++)
+    for(int i = 1; i <= numElements; i++)
       cout << frequencies[i].getWord() << "\t\t\t" << frequencies[i].getValue() << endl;
   }
 
@@ -142,7 +172,17 @@ namespace junayed_naushad
     int index = numElements;
     frequencies[index].setWord(word);
     frequencies[index].setValue(1);
-    //check invariant
+
+    string childWord;
+    int childFrequency;
+    string parentWord;
+    int parentFrequency;
+
+    while(index > 1 && frequencies[index].getValue() < frequencies[index/2].getValue())
+    {
+      swap(index, (index/2));
+      index = index/2;
+    }
     return index;
   }
 
@@ -151,6 +191,21 @@ namespace junayed_naushad
     int frequency = frequencies[index].getValue() + 1;
     frequencies[index].setValue(frequency);
     //check invariant
+    
+    if(2*index > numElements) //leaf node
+      return;
+    else if(2*index+1 > numElements) //node only has one child
+    {
+      if(frequencies[index].getValue() > frequencies[2*index].getValue())
+      {
+        swap(index, (2*index));
+      }
+    }
+    else //node has both children
+    {
+      
+    }
+    while(2*index+1 <= numElements && (frequencies[index].getValue() > frequencies[2*index].getValue() || frequencies[index].getValue() > frequencies[2*index+1].getValue()) )
   }
 
   void HeavyHitter::insert(string word)
@@ -174,19 +229,24 @@ namespace junayed_naushad
       minHeap.increment(index);
     }
   }
+
   void HeavyHitter::replaceMin(string word)
   {
-    //hashTable.remove(1);
+    string old_min = minHeap.getWordAtIndex(1);
+    int min_frequency = minHeap.getFrequencyAtIndex(1);
+    hashTable.remove(old_min);
     Entry e1 = Entry(word, 1);
     hashTable.add(e1);
+    minHeap.setEntry(1, word, min_frequency);
   }
+
   void HeavyHitter::printHeap() const
   {
     minHeap.printHeap();
   }
+
   void HeavyHitter::printTable() const
   {
     hashTable.printTable();
   }
-
 }
