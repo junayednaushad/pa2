@@ -217,6 +217,7 @@ namespace junayed_naushad
         int index = minHeap.insert(word);
         Entry e1 = Entry(word, index);
         hashTable.add(e1);
+        updateTable();
       }
       else // min heap full
       {
@@ -227,6 +228,7 @@ namespace junayed_naushad
     {
       int index = hashTable.getHeapIndex(word);
       minHeap.increment(index);
+      updateTable();
     }
   }
 

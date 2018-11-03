@@ -34,9 +34,7 @@ int main()
       {
         while (getline(myfile, word, ' '))
         {
-          transform(word.begin(), word.end(), word.begin(), ::tolower);
           h1.insert(word);
-          h1.updateTable();
         }
       myfile.close();
       }
@@ -62,7 +60,6 @@ int main()
       cin >> word;
       transform(word.begin(), word.end(), word.begin(), ::tolower);
       h1.insert(word);
-      h1.updateTable();
     }
 
     else
